@@ -1,0 +1,23 @@
+#navbarToggleExternalContent {
+    transition: 0.3s;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover, a:active {
+    color: darkgray;
+}
+
+.item {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 13px;
+    .bi {
+        font-size: 30px;
+    }
+}
