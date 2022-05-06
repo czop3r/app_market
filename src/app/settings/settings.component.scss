@@ -1,0 +1,54 @@
+ul {
+  list-style: none;
+
+  li {
+    margin: 5px 0;
+    border: 1px solid whitesmoke;
+    padding: 5px;
+    span {
+      width: 20vw;
+    }
+  }
+  .btn {
+    color: grey;
+  }
+  .btn:hover {
+    color: lightgray;
+  }
+  li:hover {
+    border: 1px solid lightgray;
+  }
+}
+
+.settings {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.card {
+  margin: 5px 0;
+  border: 1px solid whitesmoke;
+  padding: 5px;
+}
+
+.card:hover {
+  border: 1px solid lightgray;
+}
+
+.positive {
+  color: green;
+  font-weight: bold;
+}
+
+.negative {
+  font-weight: bold;
+  color: red;
+}
+
+.btn {
+  margin-right: 4px;
+}
+
+span {
+  width: 12vw;
+}

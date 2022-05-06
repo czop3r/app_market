@@ -1,0 +1,27 @@
+.card {
+  margin: 5px 0;
+  border: 1px solid whitesmoke;
+  padding: 5px;
+}
+
+.card:hover {
+  border: 1px solid lightgray;
+}
+
+.positive {
+  color: green;
+  font-weight: bold;
+}
+
+.negative {
+  font-weight: bold;
+  color: red;
+}
+
+.btn {
+  margin-right: 4px;
+}
+
+span {
+  width: 12vw;
+}

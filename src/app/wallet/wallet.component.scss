@@ -1,0 +1,14 @@
+ul {
+  list-style: none;
+  li {
+    margin: 5px 0;
+    border: 1px solid whitesmoke;
+    padding: 5px;
+    span {
+      width: 90px;
+    }
+  }
+  li:hover {
+    border: 1px solid lightgray;
+  }
+}

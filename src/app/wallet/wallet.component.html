@@ -1,1 +1,44 @@
-<p>wallet works!</p>
+<div fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="center center">
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <h1>Your Wallet</h1>
+  </div>
+  <div class="stocks">
+    <h2>Your Stocks:</h2>
+    <div *ngIf="msgList">
+      <span>You dont have any stocks, go to Market and buy something </span>
+      <a class="btn" routerLink="/market"
+        ><i class="bi bi-graph-up-arrow"></i
+      ></a>
+    </div>
+    <ul *ngIf="!msgList">
+      <li
+        *ngFor="let stock of stocks"
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        fxLayoutGap="20px"
+        fxHide.xs
+      >
+        <span>Company: </span>
+        <span>{{ stock.symbol | uppercase }}</span>
+        <span>Stocks: </span>
+        <span>{{ stock.value }}</span>
+        <button class="btn btn-warning" (click)="openDialog(stock)">
+          <i class="bi bi-piggy-bank"></i><span fxHide.xs> Sell</span>
+        </button>
+      </li>
+      <li
+        *ngFor="let stock of stocks"
+        fxLayout="row wrap"
+        fxLayoutAlign="space-between center"
+        fxLayoutGap="2px"
+        fxHide.gt-xs
+      >
+        <span>{{ stock.symbol | uppercase }}</span>
+        <span>{{ stock.value }}</span>
+        <button class="btn btn-warning" (click)="openDialog(stock)">
+          <i class="bi bi-piggy-bank"></i><span fxHide.xs> Sell</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

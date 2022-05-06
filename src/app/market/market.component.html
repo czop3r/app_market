@@ -1,2 +1,6 @@
-<app-company-details *ngIf="companyView"></app-company-details>
-<app-company [company]="company" (companyView)="onCompanyView($event)" *ngFor="let company of companiesList"></app-company>
+<app-company
+  [company]="company"
+  (progresBar)="onCheckProgresBar($event)"
+  *ngFor="let company of companiesList"
+></app-company>
+<mat-progress-bar *ngIf="progresBar" mode="indeterminate"></mat-progress-bar>

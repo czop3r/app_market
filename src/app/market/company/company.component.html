@@ -1,12 +1,44 @@
-<div>
-    <span>Symbol: {{company.symbol}} | </span>
-    <span>Price: {{company.price}}</span>
-    <br>
-    <span>Volume: {{company.volume}} | </span>
-    <span>Change: {{company.change}}</span>
-    <br>
-    <span>Change Percent: {{company.changePercent}}</span>
-    <br>
-    <br>
+<div
+  class="card"
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  fxHide.lt-lg
+>
+  <span>Symbol: {{ company.symbol }}</span>
+  <span>Volume: {{ company.volume }}</span>
+  <span class="{{ checkChange }}">{{ company.change }}</span>
+  <span class="{{ checkChange }}">{{ company.changePercent }}</span>
+  <span>Price: {{ company.price }}$</span>
+  <div>
+    <button class="btn" (click)="onRefresh()">
+      <i class="bi bi-arrow-repeat"></i> Refresh
+    </button>
+    <button class="btn btn-light" (click)="openDialogChart()">
+      <i class="bi bi-graph-up"></i> Chart
+    </button>
+    <button class="btn btn-success" (click)="openDialogBuy()">
+      <i class="bi bi-currency-dollar"></i> Buy
+    </button>
+  </div>
 </div>
-<button class="btn btn-success" (click)="onCompanyView()">Show Chart</button>
+
+<div
+  class="card"
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  fxHide.gt-md
+>
+  <span>{{ company.symbol }}</span>
+  <span class="{{ checkChange }}">{{ company.change }}</span>
+  <span class="{{ checkChange }}" fxHide.xs>{{ company.changePercent }}</span>
+  <span>Price: {{ company.price | number }}$</span>
+  <div>
+    <button class="btn" (click)="onRefresh()">
+      <i class="bi bi-arrow-repeat"></i>
+    </button>
+    <button class="btn btn-light" (click)="openDialogChart()">
+      <i class="bi bi-graph-up"></i>
+    </button>
+    <button class="btn btn-success" (click)="openDialogBuy()">Buy</button>
+  </div>
+</div>

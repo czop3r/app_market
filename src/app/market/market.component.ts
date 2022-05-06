@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { SettingsService } from '../settings/settings.service';
 import { Company } from './company.model';
 import { MarketService } from './market.service';
@@ -7,35 +8,34 @@ import { MarketService } from './market.service';
 @Component({
   selector: 'app-market',
   templateUrl: './market.component.html',
-  styleUrls: ['./market.component.scss']
+  styleUrls: ['./market.component.scss'],
 })
 export class MarketComponent implements OnInit, OnDestroy {
-  companyView: boolean = false;
   companiesList: Company[];
+  progresBar: boolean = true;
   private sub$ = new Subscription();
-  
+
   constructor(
     private marketService: MarketService,
     private settingsService: SettingsService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.sub$.add(
-      this.settingsService.companiesList.subscribe(
-        sub => {
-          this.companiesList = sub;
-        }
-      )
+      this.marketService.companiesList.subscribe((sub) => {
+        this.companiesList = sub;
+        this.progresBar = false;
+      })
     );
   }
 
   ngOnDestroy() {
-    if(this.sub$) {
+    if (this.sub$) {
       this.sub$.unsubscribe();
     }
   }
 
-  onCompanyView(event: boolean) {
-    this.companyView = event;
+  onCheckProgresBar(event: boolean) {
+    this.progresBar = event;
   }
 }

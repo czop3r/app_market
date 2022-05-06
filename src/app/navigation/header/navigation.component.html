@@ -1,0 +1,72 @@
+<div class="collapse" id="navbarToggleExternalContent" fxHide.xs>
+  <div
+    class="bg-light"
+    fxLayoutGap="20px"
+    fxLayoutAlign="center center"
+    fxLayout="row"
+  >
+    <a class="item" routerLink="/settings"
+      ><i class="bi bi-gear"></i> Settings</a
+    >
+    <a class="item" routerLink="/user"><i class="bi bi-person"></i> User</a>
+    <a class="item" routerLink="/wallet"
+      ><i class="bi bi-credit-card"></i> Your Wallet</a
+    >
+    <a class="item" routerLink="/dashboard"
+      ><i class="bi bi-speedometer2"></i> Dashboard</a
+    >
+  </div>
+</div>
+<nav class="navbar navbar-light bg-light" fxHide.xs>
+  <div class="container-fluid d-flex">
+    <div class="navHeader">
+      <a routerLink="/">LOGO</a>
+    </div>
+    <!-- <span>Saldo: {{saldo}}</span> -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarToggleExternalContent"
+      aria-controls="navbarToggleExternalContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      fxLayout="row"
+      fxLayoutGap="10px"
+      class="navHeader"
+      fxLayoutAlign="end"
+    >
+      <a class="item" routerLink="/market"
+        ><i class="bi bi-bank2"></i> Market</a
+      >
+      <a class="item" routerLink="/login"
+        ><i class="bi bi-box-arrow-in-right"></i> Login</a
+      >
+      <a class="item" href="#"><i class="bi bi-box-arrow-left"></i> Logout</a>
+    </div>
+  </div>
+</nav>
+<div class="saldo" fxLayoutAlign="end center" fxHide.xs>
+  <span>Saldo: {{ saldo | number }} $</span>
+</div>
+
+<nav class="navbar navbar-light bg-light" fxHide.gt-xs>
+  <div class="container-fluid d-flex justify-content-between">
+    <div fxLayoutAlign="flex-end">
+      <button
+        mat-icon-button
+        type="button"
+        class="example-icon"
+        (click)="onToggleSidenav()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <span>{{ saldo | number }} $</span>
+    <a routerLink="/">LOGO</a>
+  </div>
+</nav>
