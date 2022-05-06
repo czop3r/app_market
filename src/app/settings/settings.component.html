@@ -1,1 +1,57 @@
-<p>settings works!</p>
+<form 
+    fxLayout="column" 
+    fxLayoutAlign="center center" 
+    fxLayoutGap="10px" 
+    #f="ngForm" 
+    (ngSubmit)="onSearch(f)">
+    <input  
+        placeholder="Company"
+        ngModel 
+        name="search"
+        required
+        #emailInput="ngModel">
+    <button type="submit" [disabled]="f.invalid">Search</button>
+</form>
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+
+    <label for="symbol">Symbol: </label>
+    <input 
+        #symbol="ngModel" 
+        name="symbol" 
+        type="text" 
+        ngModel>
+  
+    <label for="price">price: </label>
+    <input 
+        #price="ngModel" 
+        name="price" 
+        type="text" 
+        ngModel>
+
+    <label for="volume">volume: </label>
+    <input 
+        #volume="ngModel" 
+        name="volume" 
+        type="text" 
+        ngModel>
+
+    <label for="change">change: </label>
+    <input 
+        #change="ngModel" 
+        name="change" 
+        type="text" 
+        ngModel>
+
+    <label for="changePercent">changePercent: </label>
+    <input 
+        #changePercent="ngModel" 
+        name="changePercent" 
+        type="text" 
+        ngModel>
+
+    <p>Add yout Company</p>
+    <button type="submit">Submit</button>
+  
+  </form>
+
+  

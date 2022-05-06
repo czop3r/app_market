@@ -3,7 +3,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -15,6 +15,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { UserComponent } from './users/user/user.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CompanyComponent } from './market/company/company.component';
+import { CompanyDetailsComponent } from './market/company-details/company-details.component';
 
 const routes: Routes = [
   { path: '', component: WelcomeComponent},
@@ -36,11 +37,13 @@ const routes: Routes = [
     LoginComponent,
     UserComponent,
     DashboardComponent,
-    CompanyComponent
+    CompanyComponent,
+    CompanyDetailsComponent
   ],
   imports: [
-    FormsModule,
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     FlexLayoutModule,
     RouterModule.forRoot(routes),
     HttpClientModule,

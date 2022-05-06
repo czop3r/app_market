@@ -1,3 +1,2 @@
-<div class="d-flex p-5 d-ms-flex">
-    <canvas id="companyChart" width="600" height="300"></canvas>
-</div>
+<app-company-details *ngIf="companyView"></app-company-details>
+<app-company [company]="company" (companyView)="onCompanyView($event)" *ngFor="let company of companiesList"></app-company>

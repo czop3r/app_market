@@ -1,1 +1,12 @@
-<p>company works!</p>
+<div>
+    <span>Symbol: {{company.symbol}} | </span>
+    <span>Price: {{company.price}}</span>
+    <br>
+    <span>Volume: {{company.volume}} | </span>
+    <span>Change: {{company.change}}</span>
+    <br>
+    <span>Change Percent: {{company.changePercent}}</span>
+    <br>
+    <br>
+</div>
+<button class="btn btn-success" (click)="onCompanyView()">Show Chart</button>
