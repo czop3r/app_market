@@ -12,7 +12,7 @@
     </div>
     <ul *ngIf="!msgList">
       <li
-        *ngFor="let stock of stocks"
+        *ngFor="let stock of userData.stocks"
         fxLayout="row"
         fxLayoutAlign="space-between center"
         fxLayoutGap="20px"
@@ -27,7 +27,7 @@
         </button>
       </li>
       <li
-        *ngFor="let stock of stocks"
+        *ngFor="let stock of userData.stocks"
         fxLayout="row wrap"
         fxLayoutAlign="space-between center"
         fxLayoutGap="2px"

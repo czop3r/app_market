@@ -17,7 +17,6 @@ import { MarketComponent } from './market/market.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { WalletComponent } from './wallet/wallet.component';
 import { SettingsComponent } from './settings/settings.component';
-import { UserComponent } from './users/user/user.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CompanyComponent } from './market/company/company.component';
 import { CompanyDetailsComponent } from './market/company-details/company-details.component';
@@ -34,6 +33,11 @@ import { SellDialogComponent } from './wallet/sell-dialog/sell-dialog.component'
 import { CompanyDialogComponent } from './market/company/company-dialog/company-dialog.component';
 import { SettingsDialogComponent } from './settings/settings-dialog/settings-dialog.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { UsersComponent } from './auth/users/users.component';
+import { SignupComponent } from './auth/signup/signup.component';
+
 
 
 
@@ -42,7 +46,7 @@ const routes: Routes = [
   { path: '', component: WelcomeComponent},
   { path: 'market', component: MarketComponent },
   { path: 'wallet', component: WalletComponent },
-  { path: 'user', component: UserComponent },
+  { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'settings', component: SettingsComponent }
@@ -57,13 +61,14 @@ const routes: Routes = [
     WalletComponent,
     SettingsComponent,
     LoginComponent,
-    UserComponent,
     DashboardComponent,
     CompanyComponent,
     CompanyDetailsComponent,
     SellDialogComponent,
     CompanyDialogComponent,
-    SettingsDialogComponent
+    SettingsDialogComponent,
+    UsersComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -82,7 +87,9 @@ const routes: Routes = [
     MatButtonModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatFormFieldModule,
+    MatInputModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

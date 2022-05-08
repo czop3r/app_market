@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chart, registerables } from 'chart.js';
-import { Subscription } from 'rxjs';
+import { map, Subscription, switchMap } from 'rxjs';
 
 import { CompanyChart } from '../company.model';
 import { MarketService } from '../market.service';
@@ -27,14 +27,10 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.sub$.add(
-      this.marketService.companyChart.subscribe((sub) => {
-        this.companyChart = sub;
-      })
-    );
     Chart.register(...registerables);
     this.sub$.add(
-      this.marketService.onFetchCompanyChart().subscribe((sub) => {
+      this.marketService.onFetchCompanyChart(this.data.symbol).subscribe(() => {
+        this.companyChart = this.marketService.companyChart;
         this.loadChart();
         this.loadingProgress = false;
       })

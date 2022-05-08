@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { map, Subscription, switchMap } from 'rxjs';
 
+import { AuthService } from '../auth/auth.service';
+import { UserData } from '../auth/users/user.model';
 import { Company, SearchRes } from '../market/company.model';
 import { MarketService } from '../market/market.service';
 import { UIService } from '../shared/UI.service';
@@ -15,32 +17,29 @@ import { SettingsService } from './settings.service';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
+  userData: UserData;
   searchList: SearchRes[] = [];
   loadingProgress: boolean = false;
-  companiesList: Company[] = [];
   progresBar: boolean = false;
   private sub$ = new Subscription();
+  private company: Company;
 
   constructor(
     private settingsService: SettingsService,
     private marketService: MarketService,
     private uiService: UIService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.userData = this.marketService.onGetUserData();
     this.sub$.add(
-      this.settingsService.searchResponse.subscribe((sub) => {
-        this.sub$.add(
-          this.settingsService.searchResponse.subscribe((sub) => {
-            this.searchList = sub;
-          })
-        );
-      })
+      this.marketService.company.subscribe((sub) => (this.company = sub))
     );
     this.sub$.add(
-      this.marketService.companiesList.subscribe((sub) => {
-        this.companiesList = sub;
+      this.settingsService.searchResponse.subscribe((sub) => {
+        this.searchList = sub;
       })
     );
   }
@@ -55,25 +54,44 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.loadingProgress = true;
     this.searchList = [];
     this.sub$.add(
-      this.settingsService
-        .onFetchSearch(f.form.value.search)
-        .subscribe((sub) => {
-          this.loadingProgress = false;
-        })
-    );
-  }
-
-  onAddCompany(company: SearchRes, index: number) {
-    this.progresBar = true;
-    this.sub$.add(
-      this.marketService.onFetchCompanyInfo(company.symbol).subscribe((sub) => {
-        this.onUpgradeCompanies(index);
+      this.settingsService.onFetchSearch(f.form.value.search).subscribe(() => {
+        this.loadingProgress = false;
       })
     );
   }
 
+  onAddCompany(company: SearchRes) {
+    this.progresBar = true;
+    this.sub$.add(
+      this.marketService
+        .onFetchCompanyInfo(company.symbol)
+        .pipe(
+          map(() => {
+            this.progresBar = false;
+            const index = this.userData.companies.findIndex(
+              (obj) => obj.symbol == this.company.symbol
+            );
+            if (index < 0) {
+              this.userData.companies.push(this.company);
+              this.userData.saldo = this.marketService.saldo;
+              this.marketService.companiesList = this.userData.companies;
+              this.searchList.splice(index, 1);
+              const msg = 'Added company ' + this.company.symbol;
+              this.uiService.openSnackBar(msg, 'close', 3000);
+            } else {
+              const msg = 'Company ' + this.company.symbol + ' exist';
+              this.uiService.openSnackBar(msg, 'close', 3000);
+            }
+            // console.log(this.userData.saldo)
+          }),
+          switchMap(() => this.authService.updateUserData(this.userData))
+        )
+        .subscribe(() => {})
+    );
+  }
+
   checkChange(i: number): string {
-    const value = this.companiesList[i].change;
+    const value = this.userData.companies[i].change;
     var msg = 'positive';
     if (value.slice(0, 1) === '-') {
       msg = 'negative';
@@ -88,28 +106,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.sub$.add(dialogRef.afterClosed().subscribe());
+    this.sub$.add(this.sub$.add(dialogRef.afterClosed().subscribe()));
   }
 
-  private onUpgradeCompanies(index: number) {
-    this.sub$.add(
-      this.marketService.company.subscribe((sub) => {
-        this.progresBar = false;
-        const company = sub;
-        const index = this.companiesList.findIndex(
-          (obj) => obj.symbol == company.symbol
-        );
-        if (index < 0) {
-          this.companiesList.push(company);
-          this.marketService.companiesList.next(this.companiesList);
-          this.searchList.splice(index, 1);
-          const msg = 'Added company ' + company.symbol;
-          this.uiService.openSnackBar(msg, 'close', 3000);
-        } else {
-          const msg = 'Company ' + company.symbol + ' exist';
-          this.uiService.openSnackBar(msg, 'close', 3000);
-        }
-      })
-    );
+  onDelete(index: number) {
+    this.userData.companies.splice(index, 1);
+    this.marketService.companiesList = this.userData.companies;
+    this.sub$.add(this.authService.updateUserData(this.userData).subscribe());
   }
 }

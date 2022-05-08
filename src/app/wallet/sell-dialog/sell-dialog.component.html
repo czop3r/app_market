@@ -34,7 +34,8 @@
         [disabled]="
           data.stock.soldValue > data.stock.value ||
           data.stock.soldValue <= 0 ||
-          !data.stock.soldValue
+          !data.stock.soldValue ||
+          !data.stock.price
         "
       >
         Sell

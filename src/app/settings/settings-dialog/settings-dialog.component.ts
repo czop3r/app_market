@@ -30,15 +30,9 @@ export class SettingsDialogComponent implements OnInit, OnDestroy {
     this.sub$.add(
       this.marketService
         .onFetchCompanyOverview(this.data.symbol)
-        .subscribe((sub) => {
+        .subscribe(() => {
+          this.companyOverview = this.marketService.companyOverview;
           this.loadingProgress = false;
-          this.sub$.add(
-            this.marketService.companyOverview.subscribe(
-              (sub: CompanyOverview) => {
-                this.companyOverview = sub;
-              }
-            )
-          );
         })
     );
   }

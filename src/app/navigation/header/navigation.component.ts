@@ -6,7 +6,9 @@ import {
   Output,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { WalletService } from 'src/app/wallet/wallet.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { UserData } from 'src/app/auth/users/user.model';
+import { MarketService } from 'src/app/market/market.service';
 
 @Component({
   selector: 'app-navigation',
@@ -15,15 +17,19 @@ import { WalletService } from 'src/app/wallet/wallet.service';
 })
 export class NavigationComponent implements OnInit, OnDestroy {
   @Output() sidenavToggle = new EventEmitter<void>();
-  saldo: number = 0;
+  userData: UserData;
   private sub$ = new Subscription();
 
-  constructor(private walletService: WalletService) {}
+  constructor(
+    private marketService: MarketService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
+    this.userData = JSON.parse(localStorage.getItem('marketData'));
     this.sub$.add(
-      this.walletService.saldo.subscribe((sub) => {
-        this.saldo = sub;
+      this.marketService.saldoHeader.subscribe((sub: number) => {
+        this.userData.saldo = sub;
       })
     );
   }

@@ -2,7 +2,7 @@
   <h1>Settings</h1>
 </div>
 <label for="companies">Your Companies</label>
-<div *ngFor="let company of companiesList; let i = index" #companies>
+<div *ngFor="let company of userData.companies; let i = index" #companies>
   <div
     class="card"
     fxLayout="row"
@@ -17,6 +17,9 @@
     <div>
       <button class="btn btn-light" (click)="openDialogInfo(company)">
         <i class="bi bi-info-square"></i> Info
+      </button>
+      <button class="btn btn-dange" (click)="onDelete(i)">
+        <i class="bi bi-trash"></i><span fxHide.lt-md> Delete</span>
       </button>
     </div>
   </div>
@@ -36,6 +39,9 @@
     <div>
       <button class="btn btn-light" (click)="openDialogInfo(company)">
         <i class="bi bi-info-square"></i>
+      </button>
+      <button class="btn btn-dange" (click)="onDelete(i)">
+        <i class="bi bi-trash"></i>
       </button>
     </div>
   </div>
@@ -70,7 +76,7 @@
   </div>
   <ul #res>
     <li
-      *ngFor="let item of searchList; let i = index"
+      *ngFor="let item of searchList"
       fxLayout="row"
       fxLayoutAlign="space-between center"
       fxLayoutGap="10px"
@@ -80,7 +86,7 @@
       >
       <span>Name: {{ item.name }}</span>
       <span>Region: {{ item.region }}</span>
-      <button class="btn btn-outline-ligh" (click)="onAddCompany(item, i)">
+      <button class="btn btn-outline-ligh" (click)="onAddCompany(item)">
         <i class="bi bi-plus"></i><span fxHide.lt-md> Add</span>
       </button>
     </li>

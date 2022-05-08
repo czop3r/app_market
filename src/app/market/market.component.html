@@ -1,6 +1,6 @@
 <app-company
   [company]="company"
   (progresBar)="onCheckProgresBar($event)"
-  *ngFor="let company of companiesList"
+  *ngFor="let company of userData.companies"
 ></app-company>
 <mat-progress-bar *ngIf="progresBar" mode="indeterminate"></mat-progress-bar>

@@ -7,12 +7,13 @@ import {
   Output,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { map, Subscription, switchMap } from 'rxjs';
 
+import { AuthService } from 'src/app/auth/auth.service';
+import { UserData } from 'src/app/auth/users/user.model';
 import { UIService } from 'src/app/shared/UI.service';
-import { WalletService } from 'src/app/wallet/wallet.service';
 import { CompanyDetailsComponent } from '../company-details/company-details.component';
-import { Company, Stock } from '../company.model';
+import { Company } from '../company.model';
 import { MarketService } from '../market.service';
 import { CompanyDialogComponent } from './company-dialog/company-dialog.component';
 
@@ -24,37 +25,21 @@ import { CompanyDialogComponent } from './company-dialog/company-dialog.componen
 export class CompanyComponent implements OnInit, OnDestroy {
   @Input() company: Company;
   @Output() progresBar = new EventEmitter<boolean>();
-  companiesList: Company[];
-  saldo: number = 0;
+  userData: UserData;
   showChart: boolean = false;
   checkChange: string = '';
-  stocks: Stock[];
   index: number;
   private sub$ = new Subscription();
 
   constructor(
     private marketService: MarketService,
     public dialog: MatDialog,
-    private walletService: WalletService,
-    private uiService: UIService
+    private uiService: UIService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.sub$.add(
-      this.walletService.saldo.subscribe((sub) => {
-        this.saldo = sub;
-      })
-    );
-    this.sub$.add(
-      this.marketService.companiesList.subscribe((sub) => {
-        this.companiesList = sub;
-      })
-    );
-    this.sub$.add(
-      this.walletService.stocks.subscribe((sub) => {
-        this.stocks = sub;
-      })
-    );
+    this.userData = this.marketService.onGetUserData();
     this.onCheckChange();
   }
 
@@ -82,20 +67,29 @@ export class CompanyComponent implements OnInit, OnDestroy {
     });
 
     this.sub$.add(
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          const msg = 'You bought ' + result.buyValue + ' stocks.';
-          this.uiService.openSnackBar(msg, 'close', 3000);
-          const value =
-            Math.round(
-              (result.price * result.buyValue + Number.EPSILON) * 100
-            ) / 100;
-          this.saldo =
-            Math.round((this.saldo - value + Number.EPSILON) * 100) / 100;
-          this.walletService.saldo.next(this.saldo);
-          this.upgradeStock(result.symbol, result.buyValue);
-        }
-      })
+      dialogRef
+        .afterClosed()
+        .pipe(
+          map((result) => {
+            if (result) {
+              const msg = 'You bought ' + result.buyValue + ' stocks.';
+              this.uiService.openSnackBar(msg, 'close', 3000);
+              const value =
+                Math.round(
+                  (result.price * result.buyValue + Number.EPSILON) * 100
+                ) / 100;
+              this.userData.saldo =
+                Math.round(
+                  (this.userData.saldo - value + Number.EPSILON) * 100
+                ) / 100;
+              this.marketService.saldo = this.userData.saldo;
+              this.marketService.saldoHeader.next(this.userData.saldo);
+              this.upgradeStock(result.symbol, result.buyValue);
+            }
+          }),
+          switchMap(() => this.authService.updateUserData(this.userData))
+        )
+        .subscribe()
     );
   }
 
@@ -105,7 +99,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
       data: { symbol: this.company.symbol },
     });
 
-    this.sub$.add(dialogRef.afterClosed().subscribe((result) => {}));
+    this.sub$.add(dialogRef.afterClosed().subscribe());
   }
 
   onRefresh() {
@@ -113,32 +107,36 @@ export class CompanyComponent implements OnInit, OnDestroy {
     this.sub$.add(
       this.marketService
         .onFetchCompanyInfo(this.company.symbol)
-        .subscribe((sub) => {
-          this.sub$.add(
-            this.marketService.company.subscribe((sub) => {
-              this.progresBar.emit(false);
-              const index = this.companiesList.findIndex(
-                (obj) => obj.symbol == this.company.symbol
-              );
-              this.company = sub;
-              this.companiesList[index] = this.company;
-              this.marketService.companiesList.next(this.companiesList);
-            })
-          );
-        })
+        .pipe(
+          map(() => {
+            this.sub$.add(
+              this.marketService.company.subscribe((sub) => {
+                this.progresBar.emit(false);
+                const index = this.userData.companies.findIndex(
+                  (obj) => obj.symbol == this.company.symbol
+                );
+                this.company = sub;
+                this.userData.companies[index] = this.company;
+                this.marketService.companiesList = this.userData.companies;
+              })
+            );
+          })
+        )
+        .subscribe()
     );
   }
 
   private upgradeStock(symbol: string, value: number) {
-    const index = this.stocks.findIndex((obj) => obj.symbol == symbol);
+    const index = this.userData.stocks.findIndex((obj) => obj.symbol == symbol);
     if (index < 0) {
-      this.stocks.splice(this.stocks.length, 0, {
+      this.userData.stocks.splice(this.userData.stocks.length, 0, {
         symbol: symbol,
         value: value,
       });
     } else {
-      this.stocks[index].value = this.stocks[index].value + value;
+      this.userData.stocks[index].value =
+        this.userData.stocks[index].value + value;
     }
-    this.walletService.stocks.next(this.stocks);
+    this.marketService.stocks = this.userData.stocks;
   }
 }

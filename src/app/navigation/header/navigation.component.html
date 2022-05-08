@@ -8,12 +8,14 @@
     <a class="item" routerLink="/settings"
       ><i class="bi bi-gear"></i> Settings</a
     >
-    <a class="item" routerLink="/user"><i class="bi bi-person"></i> User</a>
     <a class="item" routerLink="/wallet"
       ><i class="bi bi-credit-card"></i> Your Wallet</a
     >
     <a class="item" routerLink="/dashboard"
       ><i class="bi bi-speedometer2"></i> Dashboard</a
+    >
+    <a class="item" routerLink="/signup"
+      ><i class="bi bi-person-plus"></i> Signup</a
     >
   </div>
 </div>
@@ -51,7 +53,7 @@
   </div>
 </nav>
 <div class="saldo" fxLayoutAlign="end center" fxHide.xs>
-  <span>Saldo: {{ saldo | number }} $</span>
+  <span>Saldo: {{ userData.saldo | number }} $</span>
 </div>
 
 <nav class="navbar navbar-light bg-light" fxHide.gt-xs>
@@ -66,7 +68,7 @@
         <mat-icon>menu</mat-icon>
       </button>
     </div>
-    <span>{{ saldo | number }} $</span>
+    <span>{{ userData.saldo | number }} $</span>
     <a routerLink="/">LOGO</a>
   </div>
 </nav>

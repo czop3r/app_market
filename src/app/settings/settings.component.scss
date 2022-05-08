@@ -11,6 +11,7 @@ ul {
   }
   .btn {
     color: grey;
+    margin-right: 4px;
   }
   .btn:hover {
     color: lightgray;
@@ -43,10 +44,6 @@ ul {
 .negative {
   font-weight: bold;
   color: red;
-}
-
-.btn {
-  margin-right: 4px;
 }
 
 span {

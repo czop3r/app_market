@@ -1,7 +1,8 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
-import { WalletService } from 'src/app/wallet/wallet.service';
+import { map, Subscription, switchMap } from 'rxjs';
+
+import { UserData } from 'src/app/auth/users/user.model';
 import { MarketService } from '../../market.service';
 
 export interface DialogData {
@@ -16,35 +17,31 @@ export interface DialogData {
   styleUrls: ['./company-dialog.component.scss'],
 })
 export class CompanyDialogComponent implements OnInit, OnDestroy {
-  saldo: number = 0;
+  userData: UserData;
   loadingProgress: boolean = true;
   private sub$ = new Subscription();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialogRef: MatDialogRef<CompanyDialogComponent>,
-    private marketService: MarketService,
-    private walletService: WalletService
+    private marketService: MarketService
   ) {}
 
   ngOnInit() {
     this.sub$.add(
       this.marketService
         .onFetchCompanyInfo(this.data.symbol)
+        .pipe(
+          switchMap(() => this.marketService.company),
+          map((sub) => {
+            this.data.price = Number(sub.price);
+          })
+        )
         .subscribe((sub) => {
-          this.sub$.add(
-            this.marketService.company.subscribe((sub) => {
-              this.data.price = Number(sub.price);
-              this.loadingProgress = false;
-            })
-          );
+          this.loadingProgress = false;
         })
     );
-    this.sub$.add(
-      this.walletService.saldo.subscribe((sub) => {
-        this.saldo = sub;
-      })
-    );
+    this.userData = this.marketService.onGetUserData();
   }
 
   ngOnDestroy() {

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 
+import { environment } from 'src/environments/environment';
 import { SearchRes } from '../market/company.model';
 
 @Injectable({
@@ -15,7 +16,10 @@ export class SettingsService {
   onFetchSearch(keyword: string): Observable<Object> {
     return this.http
       .get(
-        'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo'
+        'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' +
+          keyword +
+          '&apikey=' +
+          environment.alphaKey
       )
       .pipe(
         catchError((err) => {
