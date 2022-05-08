@@ -11,6 +11,7 @@ import {
 } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
+import { MarketService } from '../market/market.service';
 
 import { UIService } from '../shared/UI.service';
 import { AuthData, AuthResponseData, User, UserData } from './users/user.model';
@@ -34,7 +35,8 @@ export class AuthService {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private uiService: UIService
+    private uiService: UIService,
+    private marketService: MarketService
   ) {}
 
   registerUser(authData: AuthData): Observable<AuthResponseData> {
@@ -56,15 +58,13 @@ export class AuthService {
             resData.idToken,
             +resData.expiresIn
           );
-          this.creatUserData(resData.localId);
         })
       );
   }
 
   login(authData: AuthData): Observable<AuthResponseData> {
-    console.log(authData);
     return this.http
-      .post<AuthResponseData>('', {
+      .post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + api_key, {
         email: authData.email,
         password: authData.password,
         returnSecureToken: true,
@@ -81,44 +81,6 @@ export class AuthService {
             resData.idToken,
             +resData.expiresIn
           );
-        })
-      );
-  }
-
-  fetchUserData(id: string) {
-    this.http.get('').pipe(
-      catchError((err) => {
-        this.handleError(err);
-        return throwError(err);
-      }),
-      tap((resData: User) => {
-        // this.user = resData;
-        localStorage.setItem('marketData', JSON.stringify(this.userData));
-        this.authSuccessfully();
-      })
-    );
-  }
-
-  creatUserData(id: string) {
-    console.log(id);
-    const uData = localStorage.getItem('marketData');
-    console.log(uData);
-    console.log(api_path + 'users/' + id + '/marketData.json');
-    return this.http
-      .put(api_path + 'users/' + id + '/marketData.json', uData)
-      .pipe(
-        catchError((err) => {
-          this.handleError(err);
-          return throwError(err);
-        }),
-        tap((res) => {
-          console.log(res);
-          this.uiService.openSnackBar(
-            'Added user succsessfull!',
-            'close',
-            3000
-          );
-          this.authSuccessfully();
         })
       );
   }
@@ -147,6 +109,8 @@ export class AuthService {
       return;
     }
 
+    this.marketService.userData.next(JSON.parse(localStorage.getItem('marketData')));
+
     const loadedUser = new User(
       userData.email,
       userData.id,
@@ -167,7 +131,7 @@ export class AuthService {
   logout() {
     this.user.next(null);
     this.authChange.next(false);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/welcome']);
     localStorage.removeItem('userData');
     localStorage.removeItem('marketData');
     if (this.tokenExpirationTimer) {
@@ -177,12 +141,58 @@ export class AuthService {
 
   autoLogout(expirationDuration: number, userId: string) {
     this.userId = userId;
+    console.log(expirationDuration);
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
   }
 
+  fetchUserData() {
+    console.log(api_path + 'users/' + this.userId + '/marketData.json')
+    return this.http.get(api_path + 'users/' + this.userId + '.json').pipe(
+      catchError((err) => {
+        this.handleError(err);
+        return throwError(err);
+      }),
+      tap((res) => {
+        localStorage.setItem('marketData', JSON.stringify(res));
+        this.uiService.openSnackBar(
+          'Added user succsessfull!',
+          'close',
+          3000
+        );
+        this.authSuccessfully();
+      })
+    );
+  }
+
+  creatUserData() {
+    console.log(api_path + 'users/' + this.userId + '/marketData.json')
+    const userData = this.marketService.onGetUserData();
+    console.log(api_path + 'users/' + this.userId + '/marketData.json', userData)
+    localStorage.setItem('marketData', JSON.stringify(userData));
+    return this.http
+      .put(api_path + 'users/' + this.userId + '/marketData.json', userData)
+      .pipe(
+        catchError((err) => {
+          this.handleError(err);
+          return throwError(err);
+        }),
+        tap((res) => {
+          console.log(res);
+          localStorage.setItem('marketData', JSON.stringify(res));
+          this.uiService.openSnackBar(
+            'Added user succsessfull!',
+            'close',
+            3000
+          );
+          this.authSuccessfully();
+        })
+      );
+  }
+
   private authSuccessfully() {
+    this.marketService.userData.next(JSON.parse(localStorage.getItem('marketData')))
     this.authChange.next(true);
     this.router.navigate(['/market']);
   }

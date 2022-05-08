@@ -27,7 +27,11 @@ export class WalletComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.userData = this.marketService.onGetUserData();
+    this.sub$.add(this.marketService.userData.subscribe(
+      sub => {
+        this.userData = sub;
+      }
+    ))
     if (this.userData.stocks.length != 0) {
       this.msgList = false;
     }
@@ -62,8 +66,8 @@ export class WalletComponent implements OnInit, OnDestroy {
                   (this.userData.saldo + Number(value) + Number.EPSILON) * 100
                 ) / 100;
               this.marketService.saldo = this.userData.saldo;
-              this.marketService.saldoHeader.next(this.userData.saldo);
               this.upgradeStock(result.symbol, result.soldValue);
+              this.marketService.userData.next(this.userData);
             }
           }),
           switchMap(() => this.authService.updateUserData(this.userData))

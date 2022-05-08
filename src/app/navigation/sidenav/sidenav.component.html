@@ -5,28 +5,28 @@
   <a mat-list-item routerLink="/market" (click)="onClose()">
     <span class="nav-caption"><i class="bi bi-bank2"></i> Market</span>
   </a>
-  <a mat-list-item routerLink="/dashboard" (click)="onClose()">
+  <a mat-list-item routerLink="/dashboard" (click)="onClose()" *ngIf="isAuth"> 
     <span class="nav-caption"
       ><i class="bi bi-speedometer2"></i> Dashboard</span
     >
   </a>
-  <a mat-list-item routerLink="/settings" (click)="onClose()">
+  <a mat-list-item routerLink="/settings" (click)="onClose()" *ngIf="isAuth">
     <span class="nav-caption"><i class="bi bi-gear"></i> Settings</span>
   </a>
   <a mat-list-item routerLink="/wallet" (click)="onClose()">
-    <span class="nav-caption"
+    <span class="nav-caption" *ngIf="isAuth"
       ><i class="bi bi-credit-card"></i> Your Wallet</span
     >
   </a>
-  <a mat-list-item routerLink="/signup" (click)="onClose()">
+  <a mat-list-item routerLink="/signup" (click)="onClose()" *ngIf="!isAuth">
     <span class="nav-caption"><i class="bi bi-person-plus"></i> Signup</span>
   </a>
-  <a mat-list-item routerLink="/login" (click)="onClose()">
+  <a mat-list-item routerLink="/login" (click)="onClose()" *ngIf="!isAuth">
     <span class="nav-caption"
       ><i class="bi bi-box-arrow-in-right"></i> Login</span
     >
   </a>
-  <a mat-list-item routerLink="/training" (click)="onClose()">
+  <a mat-list-item routerLink="/training" (click)="onLogout()" *ngIf="isAuth">
     <span class="nav-caption"><i class="bi bi-box-arrow-left"></i> Logout</span>
   </a>
 </mat-nav-list>

@@ -33,7 +33,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.userData = this.marketService.onGetUserData();
+    this.sub$.add(this.marketService.userData.subscribe(
+      sub => {
+        this.userData = sub;
+      }
+    ))
     this.sub$.add(
       this.marketService.company.subscribe((sub) => (this.company = sub))
     );
@@ -82,7 +86,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
               const msg = 'Company ' + this.company.symbol + ' exist';
               this.uiService.openSnackBar(msg, 'close', 3000);
             }
-            // console.log(this.userData.saldo)
+            this.marketService.userData.next(this.userData);
           }),
           switchMap(() => this.authService.updateUserData(this.userData))
         )

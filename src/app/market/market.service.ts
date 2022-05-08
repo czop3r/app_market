@@ -22,7 +22,6 @@ export class MarketService {
   companyChart: CompanyChart;
   companiesList: Company[];
   companyOverview: CompanyOverview;
-  saldoHeader = new Subject<Number>();
   saldo: number = 200000;
   stocks: Stock[] = [
     {
@@ -30,20 +29,8 @@ export class MarketService {
       value: 430,
     },
     {
-      symbol: 'Tesco',
-      value: 123,
-    },
-    {
       symbol: 'NBA',
       value: 3,
-    },
-    {
-      symbol: 'LG',
-      value: 4343,
-    },
-    {
-      symbol: 'APPLE',
-      value: 455,
     },
     {
       symbol: 'TACO',

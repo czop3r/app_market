@@ -29,6 +29,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
   showChart: boolean = false;
   checkChange: string = '';
   index: number;
+  isAuth: boolean = false;
   private sub$ = new Subscription();
 
   constructor(
@@ -39,8 +40,17 @@ export class CompanyComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.userData = this.marketService.onGetUserData();
+    this.sub$.add(this.marketService.userData.subscribe(
+      sub => {
+        this.userData = sub;
+      }
+    ));
     this.onCheckChange();
+    this.sub$.add(
+      this.authService.user.subscribe(user => {
+      this.isAuth = !!user;
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -83,8 +93,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
                   (this.userData.saldo - value + Number.EPSILON) * 100
                 ) / 100;
               this.marketService.saldo = this.userData.saldo;
-              this.marketService.saldoHeader.next(this.userData.saldo);
               this.upgradeStock(result.symbol, result.buyValue);
+              this.marketService.userData.next(this.userData);
             }
           }),
           switchMap(() => this.authService.updateUserData(this.userData))

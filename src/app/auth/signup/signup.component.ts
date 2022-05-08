@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription, switchMap } from 'rxjs';
+import { map, Subscription, switchMap, tap } from 'rxjs';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -21,8 +21,9 @@ export class SignupComponent implements OnInit {
         .registerUser({
           email: form.value.email,
           password: form.value.password,
-        })
-        .pipe(switchMap((res) => this.authService.creatUserData(res.localId)))
+        }).pipe(
+          switchMap(() => this.authService.creatUserData())
+        )
         .subscribe()
     );
   }

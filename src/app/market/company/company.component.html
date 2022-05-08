@@ -9,7 +9,7 @@
   <span class="{{ checkChange }}">{{ company.change }}</span>
   <span class="{{ checkChange }}">{{ company.changePercent }}</span>
   <span>Price: {{ company.price }}$</span>
-  <div>
+  <div *ngIf="isAuth">
     <button class="btn" (click)="onRefresh()">
       <i class="bi bi-arrow-repeat"></i> Refresh
     </button>
@@ -32,7 +32,7 @@
   <span class="{{ checkChange }}">{{ company.change }}</span>
   <span class="{{ checkChange }}" fxHide.xs>{{ company.changePercent }}</span>
   <span>Price: {{ company.price | number }}$</span>
-  <div>
+  <div *ngIf="isAuth">
     <button class="btn" (click)="onRefresh()">
       <i class="bi bi-arrow-repeat"></i>
     </button>

@@ -19,7 +19,12 @@ export class MarketComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.userData = this.marketService.onGetUserData();
+    this.sub$.add(this.marketService.userData.subscribe(
+      sub => {
+        this.userData = sub;
+        console.log(sub);
+      }
+    ))
     if (this.userData.companies.length != 0) {
       this.progresBar = false;
     }

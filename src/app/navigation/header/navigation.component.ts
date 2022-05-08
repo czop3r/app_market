@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { UserData } from 'src/app/auth/users/user.model';
+import { User, UserData } from 'src/app/auth/users/user.model';
 import { MarketService } from 'src/app/market/market.service';
 
 @Component({
@@ -18,6 +18,9 @@ import { MarketService } from 'src/app/market/market.service';
 export class NavigationComponent implements OnInit, OnDestroy {
   @Output() sidenavToggle = new EventEmitter<void>();
   userData: UserData;
+  saldo: number = 0;
+  isAuth: boolean = false;
+  user: User;
   private sub$ = new Subscription();
 
   constructor(
@@ -26,10 +29,19 @@ export class NavigationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.userData = JSON.parse(localStorage.getItem('marketData'));
+    console.log(this.userData)
+    this.sub$.add(this.marketService.userData.subscribe(
+      sub => {
+        if(sub) {
+          this.userData = sub;
+          this.saldo = sub.saldo;
+        }
+      }
+    ))
     this.sub$.add(
-      this.marketService.saldoHeader.subscribe((sub: number) => {
-        this.userData.saldo = sub;
+      this.authService.user.subscribe((user) => {
+        this.user = user;
+        this.isAuth = !!user;
       })
     );
   }
@@ -42,5 +54,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   onToggleSidenav() {
     this.sidenavToggle.emit();
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 }
