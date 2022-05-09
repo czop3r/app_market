@@ -77,7 +77,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
             );
             if (index < 0) {
               this.userData.companies.push(this.company);
-              this.userData.saldo = this.marketService.saldo;
               this.marketService.companiesList = this.userData.companies;
               this.searchList.splice(index, 1);
               const msg = 'Added company ' + this.company.symbol;
