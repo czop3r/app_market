@@ -40,15 +40,15 @@ export class CompanyComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.sub$.add(this.marketService.userData.subscribe(
-      sub => {
+    this.sub$.add(
+      this.marketService.userData.subscribe((sub) => {
         this.userData = sub;
-      }
-    ));
+      })
+    );
     this.onCheckChange();
     this.sub$.add(
-      this.authService.user.subscribe(user => {
-      this.isAuth = !!user;
+      this.authService.user.subscribe((user) => {
+        this.isAuth = !!user;
       })
     );
   }

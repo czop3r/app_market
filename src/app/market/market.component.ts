@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserData } from '../auth/users/user.model';
 
+import { UserData } from '../auth/users/user.model';
 import { MarketService } from './market.service';
 
 @Component({
@@ -14,17 +14,14 @@ export class MarketComponent implements OnInit, OnDestroy {
   progresBar: boolean = true;
   private sub$ = new Subscription();
 
-  constructor(
-    private marketService: MarketService,
-  ) {}
+  constructor(private marketService: MarketService) {}
 
   ngOnInit() {
-    this.sub$.add(this.marketService.userData.subscribe(
-      sub => {
+    this.sub$.add(
+      this.marketService.userData.subscribe((sub) => {
         this.userData = sub;
-        console.log(sub);
-      }
-    ))
+      })
+    );
     if (this.userData.companies.length != 0) {
       this.progresBar = false;
     }

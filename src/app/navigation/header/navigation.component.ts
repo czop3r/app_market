@@ -6,6 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { AuthService } from 'src/app/auth/auth.service';
 import { User, UserData } from 'src/app/auth/users/user.model';
 import { MarketService } from 'src/app/market/market.service';
@@ -29,15 +30,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log(this.userData)
-    this.sub$.add(this.marketService.userData.subscribe(
-      sub => {
-        if(sub) {
+    this.sub$.add(
+      this.marketService.userData.subscribe((sub) => {
+        if (sub) {
           this.userData = sub;
           this.saldo = sub.saldo;
         }
-      }
-    ))
+      })
+    );
     this.sub$.add(
       this.authService.user.subscribe((user) => {
         this.user = user;

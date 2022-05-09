@@ -1,13 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  catchError,
-  Observable,
-  Subject,
-  tap,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { UserData } from '../auth/users/user.model';
@@ -75,10 +68,7 @@ export class MarketService {
   onFetchCompanyChart(symbol: string): Observable<Object> {
     return this.http
       .get(
-        'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=' +
-          symbol +
-          '&interval=30min&apikey=' +
-          environment.alphaKey
+        `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=30min&apikey=${environment.alphaKey}`
       )
       .pipe(
         catchError((err) => {
@@ -97,13 +87,9 @@ export class MarketService {
   }
 
   onFetchCompanyInfo(symbol: string): Observable<Object> {
-    console.log(this.saldo)
     return this.http
       .get(
-        'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' +
-          symbol +
-          '&apikey=' +
-          environment.alphaKey
+        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${environment.alphaKey}`
       )
       .pipe(
         catchError((err) => {
@@ -126,10 +112,7 @@ export class MarketService {
   onFetchCompanyOverview(symbol: string): Observable<Object> {
     return this.http
       .get(
-        'https://www.alphavantage.co/query?function=OVERVIEW&symbol=' +
-          symbol +
-          '&apikey=' +
-          environment.alphaKey
+        `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${environment.alphaKey}`
       )
       .pipe(
         catchError((err) => {
