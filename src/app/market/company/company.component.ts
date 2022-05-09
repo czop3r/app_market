@@ -92,7 +92,6 @@ export class CompanyComponent implements OnInit, OnDestroy {
                 Math.round(
                   (this.userData.saldo - value + Number.EPSILON) * 100
                 ) / 100;
-              this.marketService.saldo = this.userData.saldo;
               this.upgradeStock(result.symbol, result.buyValue);
               this.marketService.userData.next(this.userData);
             }
