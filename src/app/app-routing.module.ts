@@ -16,8 +16,6 @@ const routes: Routes = [
       import('./market/market.module').then((m) => m.MarketModule),
   },
   { path: 'wallet', component: WalletComponent, canLoad: [AuthGuard] },
-  { path: 'signup', component: SignupComponent },
-  { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canLoad: [AuthGuard] },
   {
     path: 'settings',
