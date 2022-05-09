@@ -1,0 +1,29 @@
+<div
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  *ngIf="!loadingProgress"
+  fxLayoutGap="10px"
+>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <span
+      >Company: <b>{{ companyOverview.symbol }}</b></span
+    >
+    <span>Name: {{ companyOverview.name }}</span>
+  </div>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <span>Sector: {{ companyOverview.sector }}</span>
+    <span>Industry: {{ companyOverview.industry }}</span>
+    <span>Address: {{ companyOverview.address }}</span>
+  </div>
+  <div fxLayout="column" fxHide.xs>
+    <label for="desc">Description: </label>
+    <span #desc>{{ companyOverview.desc }}</span>
+  </div>
+</div>
+<div fxLayoutAlign="center center" fxLayoutGap="10px" *ngIf="loadingProgress">
+  <div class="spinner-grow" role="status"></div>
+  <span class="sr-only">Loading...</span>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="10px">
+  <button class="btn" (click)="onNoClick()">Close</button>
+</div>

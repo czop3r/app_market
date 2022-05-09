@@ -1,1 +1,94 @@
-<p>settings works!</p>
+<div fxLayout="column" fxLayoutAlign="center center">
+  <h1>Settings</h1>
+</div>
+<label for="companies">Your Companies</label>
+<div *ngFor="let company of userData.companies; let i = index" #companies>
+  <div
+    class="card"
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    fxHide.lt-lg
+  >
+    <span>Symbol: {{ company.symbol }}</span>
+    <span>Volume: {{ company.volume }}</span>
+    <span class="{{ checkChange(i) }}">{{ company.change }}</span>
+    <span class="{{ checkChange(i) }}">{{ company.changePercent }}</span>
+    <span>Price: {{ company.price }}$</span>
+    <div>
+      <button class="btn btn-light" (click)="openDialogInfo(company)">
+        <i class="bi bi-info-square"></i> Info
+      </button>
+      <button class="btn btn-dange" (click)="onDelete(i)">
+        <i class="bi bi-trash"></i><span fxHide.lt-md> Delete</span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="card"
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    fxHide.gt-md
+  >
+    <span>{{ company.symbol }}</span>
+    <span class="{{ checkChange(i) }}">{{ company.change }}</span>
+    <span class="{{ checkChange(i) }}" fxHide.xs>{{
+      company.changePercent
+    }}</span>
+    <span>Price: {{ company.price | number }}$</span>
+    <div>
+      <button class="btn btn-light" (click)="openDialogInfo(company)">
+        <i class="bi bi-info-square"></i>
+      </button>
+      <button class="btn btn-dange" (click)="onDelete(i)">
+        <i class="bi bi-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<mat-progress-bar *ngIf="progresBar" mode="indeterminate"></mat-progress-bar>
+
+<br />
+<label for="search">Find Company to add them</label>
+<form class="form-inline" fxLayout="row" #f="ngForm" (ngSubmit)="onSubmit(f)">
+  <input
+    class="form-control mr-sm-2"
+    type="search"
+    placeholder="Symbol etc."
+    aria-label="Search"
+    #search="ngModel"
+    name="search"
+    ngModel
+  />
+  <button
+    class="btn btn-outline my-2 my-sm-0"
+    type="submit"
+    [disabled]="!search.value"
+  >
+    Search
+  </button>
+</form>
+<br />
+<div class="settings" fxLayout="column" fxLayoutAlign="center center">
+  <div fxLayout="column" fxLayoutAlign="center center" *ngIf="loadingProgress">
+    <div class="spinner-grow" role="status"></div>
+    <span class="sr-only">Loading...</span>
+  </div>
+  <ul #res>
+    <li
+      *ngFor="let item of searchList"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      fxLayoutGap="10px"
+    >
+      <span
+        >Company: <b>{{ item.symbol }}</b></span
+      >
+      <span>Name: {{ item.name }}</span>
+      <span>Region: {{ item.region }}</span>
+      <button class="btn btn-outline-ligh" (click)="onAddCompany(item)">
+        <i class="bi bi-plus"></i><span fxHide.lt-md> Add</span>
+      </button>
+    </li>
+  </ul>
+</div>

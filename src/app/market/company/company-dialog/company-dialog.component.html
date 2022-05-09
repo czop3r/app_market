@@ -1,0 +1,41 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+  <h2>{{ data.symbol }}</h2>
+  <div fxLayout="column">
+    <label for="buyValue">Stocks</label>
+    <input
+      type="number"
+      min="0"
+      class="form-control"
+      id="buyValue"
+      aria-describedby="stocks"
+      placeholder="Value"
+      [(ngModel)]="data.buyValue"
+    />
+    <br />
+    <p *ngIf="!loadingProgress">
+      Price #1: <b>{{ data.price }}</b>
+    </p>
+    <div
+      fxLayoutAlign="center center"
+      fxLayoutGap="10px"
+      *ngIf="loadingProgress"
+    >
+      <div class="spinner-grow" role="status"></div>
+    </div>
+    <p *ngIf="data.buyValue">
+      Cost: <b>{{ data.price * data.buyValue | number }}</b>
+    </p>
+    <div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="10px">
+      <button class="btn" (click)="onNoClick()">No Thanks</button>
+      <button
+        class="btn btn-success"
+        [mat-dialog-close]="data"
+        [disabled]="
+          !data.buyValue || data.price * data.buyValue > userData.saldo
+        "
+      >
+        Buy
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<div class="collapse" id="navbarToggleExternalContent" fxHide.xs>
+  <div
+    class="bg-light"
+    fxLayoutGap="20px"
+    fxLayoutAlign="center center"
+    fxLayout="row"
+  >
+    <a class="item" routerLink="/settings" *ngIf="isAuth"
+      ><i class="bi bi-gear"></i> Settings</a
+    >
+    <a class="item" routerLink="/wallet" *ngIf="isAuth"
+      ><i class="bi bi-credit-card"></i> Your Wallet</a
+    >
+    <a class="item" routerLink="/dashboard" *ngIf="isAuth"
+      ><i class="bi bi-speedometer2"></i> Dashboard</a
+    >
+    <a class="item" routerLink="/signup" *ngIf="!isAuth"
+      ><i class="bi bi-person-plus"></i> Signup</a
+    >
+  </div>
+</div>
+<nav class="navbar navbar-light bg-light" fxHide.xs>
+  <div class="container-fluid d-flex">
+    <div class="navHeader">
+      <a routerLink="/">LOGO</a>
+    </div>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarToggleExternalContent"
+      aria-controls="navbarToggleExternalContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      fxLayout="row"
+      fxLayoutGap="10px"
+      class="navHeader"
+      fxLayoutAlign="end"
+    >
+      <a class="item" routerLink="/market"
+        ><i class="bi bi-bank2"></i> Market</a
+      >
+      <a class="item" routerLink="/login" *ngIf="!isAuth"
+        ><i class="bi bi-box-arrow-in-right"></i> Login</a
+      >
+      <a class="item" href="#" (click)="onLogout()" *ngIf="isAuth"
+        ><i class="bi bi-box-arrow-left"></i> Logout</a
+      >
+    </div>
+  </div>
+</nav>
+<div
+  class="saldo"
+  fxLayoutAlign="end center"
+  fxLayoutGap="20px"
+  fxHide.xs
+  *ngIf="isAuth"
+>
+  <span>Welcome: {{ user.email }}</span>
+  <span>Saldo: {{ saldo | number }} $</span>
+</div>
+
+<nav class="navbar navbar-light bg-light" fxHide.gt-xs>
+  <div class="container-fluid d-flex justify-content-between">
+    <div fxLayoutAlign="flex-end">
+      <button
+        mat-icon-button
+        type="button"
+        class="example-icon"
+        (click)="onToggleSidenav()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <div fxLayoutAlign="center center" fxLayout="column" *ngIf="isAuth">
+      <span>{{ user.email }}</span>
+      <span *ngIf="isAuth">{{ saldo | number }} $</span>
+    </div>
+    <a routerLink="/">LOGO</a>
+  </div>
+</nav>

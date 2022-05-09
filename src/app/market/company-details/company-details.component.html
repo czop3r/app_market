@@ -1,0 +1,11 @@
+<div class="d-flex p-2 d-ms-flex">
+  <canvas id="companyChart"></canvas>
+</div>
+
+<div fxLayoutAlign="center center" fxLayoutGap="10px" *ngIf="loadingProgress">
+  <div class="spinner-grow" role="status"></div>
+  <span class="sr-only">Loading...</span>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="10px">
+  <button class="btn" (click)="onNoClick()">Close</button>
+</div>

@@ -1,51 +1,38 @@
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './navigation/navigation.component';
-import { MarketComponent } from './market/market.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { WalletComponent } from './wallet/wallet.component';
-import { SettingsComponent } from './settings/settings.component';
-import { LoginComponent } from './auth/login/login.component';
-import { UserComponent } from './users/user/user.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { CompanyComponent } from './market/company/company.component';
-
-const routes: Routes = [
-  { path: '', component: WelcomeComponent},
-  { path: 'market', component: MarketComponent },
-  { path: 'wallet', component: WalletComponent },
-  { path: 'user', component: UserComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'settings', component: SettingsComponent }
-]
+import { NavigationComponent } from './navigation/header/navigation.component';
+import { SidenavComponent } from './navigation/sidenav/sidenav.component';
+import { AppRoutingModule } from './app-routing.module';
+import { AuthModule } from './auth/auth.module';
+import { MarketModule } from './market/market.module';
+import { SettingsModule } from './settings/settings.module';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavigationComponent,
-    MarketComponent,
-    WalletComponent,
-    SettingsComponent,
-    LoginComponent,
-    UserComponent,
     DashboardComponent,
-    CompanyComponent
+    NavigationComponent,
+    SidenavComponent,
+    WelcomeComponent,
   ],
   imports: [
-    FormsModule,
-    BrowserModule,
-    FlexLayoutModule,
-    RouterModule.forRoot(routes),
+    BrowserAnimationsModule,
+    MaterialModule,
     HttpClientModule,
+    FlexLayoutModule,
+    AppRoutingModule,
+    AuthModule,
+    MarketModule,
+    SettingsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

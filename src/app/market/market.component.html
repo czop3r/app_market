@@ -1,3 +1,6 @@
-<div class="d-flex p-5 d-ms-flex">
-    <canvas id="companyChart" width="600" height="300"></canvas>
-</div>
+<app-company
+  [company]="company"
+  (progresBar)="onCheckProgresBar($event)"
+  *ngFor="let company of userData.companies"
+></app-company>
+<mat-progress-bar *ngIf="progresBar" mode="indeterminate"></mat-progress-bar>
