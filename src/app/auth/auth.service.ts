@@ -74,6 +74,7 @@ export class AuthService {
           return throwError(err);
         }),
         tap((resData) => {
+          console.log(resData);
           this.handleAuthentication(
             resData.email,
             resData.localId,
@@ -156,11 +157,6 @@ export class AuthService {
         }),
         tap((res) => {
           localStorage.setItem('marketData', JSON.stringify(res));
-          this.uiService.openSnackBar(
-            'Added user succsessfull!',
-            'close',
-            3000
-          );
           this.authSuccessfully();
         })
       );
@@ -170,10 +166,7 @@ export class AuthService {
     const userData = this.marketService.onGetUserData();
     localStorage.setItem('marketData', JSON.stringify(userData));
     return this.http
-      .put(
-        `${environment.api_path_FB}users/${this.userId}/marketData.json`,
-        userData
-      )
+      .put(`${environment.api_path_FB}users/${this.userId}.json`, userData)
       .pipe(
         catchError((err) => {
           this.handleError(err);
@@ -181,12 +174,38 @@ export class AuthService {
         }),
         tap((res) => {
           localStorage.setItem('marketData', JSON.stringify(res));
-          this.uiService.openSnackBar(
-            'Added user succsessfull!',
-            'close',
-            3000
-          );
           this.authSuccessfully();
+        })
+      );
+  }
+
+  deleteUser(idToken: string): Observable<any> {
+    const deleteUser = {
+      idToken: idToken,
+    };
+    return this.http
+      .post(
+        `https://identitytoolkit.googleapis.com/v1/accounts:delete?key=${environment.api_key_FB}`,
+        deleteUser
+      )
+      .pipe(
+        catchError((err) => {
+          this.handleError(err);
+          return throwError(err);
+        })
+      );
+  }
+
+  deleteUserData(): Observable<any> {
+    return this.http
+      .delete(`${environment.api_path_FB}users/${this.userId}.json`)
+      .pipe(
+        catchError((err) => {
+          this.handleError(err);
+          return throwError(err);
+        }),
+        tap(() => {
+          this.logout();
         })
       );
   }

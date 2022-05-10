@@ -1,0 +1,8 @@
+<div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="10px">
+  <span>{{ data.email }}</span>
+  <p>Are you sure you want to delete your account?</p>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="10px">
+  <button class="btn btn-danger" (click)="onDeleteUser()">Delete</button>
+  <button class="btn" (click)="onNoClick()">Close</button>
+</div>

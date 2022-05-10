@@ -4,11 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { map, Subscription, switchMap } from 'rxjs';
 
 import { AuthService } from '../auth/auth.service';
-import { UserData } from '../auth/users/user.model';
+import { User, UserData } from '../auth/users/user.model';
 import { Company, SearchRes } from '../market/company.model';
 import { MarketService } from '../market/market.service';
 import { UIService } from '../shared/UI.service';
 import { SettingsDialogComponent } from './settings-dialog/settings-dialog.component';
+import { SettingsUserDialogComponent } from './settings-user-dialog/settings-user-dialog.component';
 import { SettingsService } from './settings.service';
 
 @Component({
@@ -17,6 +18,7 @@ import { SettingsService } from './settings.service';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
+  user: User;
   userData: UserData;
   searchList: SearchRes[] = [];
   loadingProgress: boolean = false;
@@ -33,6 +35,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.sub$.add(this.authService.user.subscribe((sub) => (this.user = sub)));
     this.sub$.add(
       this.marketService.userData.subscribe((sub) => {
         this.userData = sub;
@@ -89,7 +92,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
           }),
           switchMap(() => this.authService.updateUserData(this.userData))
         )
-        .subscribe(() => {})
+        .subscribe((sub) => {
+          if(sub) {
+            this.uiService.openSnackBar(
+              'Added company successfull!',
+              'close',
+              3000
+            );
+          }
+        })
     );
   }
 
@@ -108,7 +119,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         symbol: company.symbol,
       },
     });
-
     this.sub$.add(this.sub$.add(dialogRef.afterClosed().subscribe()));
   }
 
@@ -116,5 +126,20 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.userData.companies.splice(index, 1);
     this.marketService.companiesList = this.userData.companies;
     this.sub$.add(this.authService.updateUserData(this.userData).subscribe());
+  }
+
+  openDialogDeleteUser() {
+    const dialogRef = this.dialog.open(SettingsUserDialogComponent, {
+      data: {
+        email: this.user.email,
+        idToken: this.user.token
+      },
+    });
+    this.sub$.add(
+      this.sub$.add(
+        dialogRef
+          .afterClosed().subscribe()
+      )
+    );
   }
 }

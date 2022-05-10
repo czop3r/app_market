@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription, switchMap } from 'rxjs';
 
+import { UIService } from 'src/app/shared/UI.service';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -12,7 +13,10 @@ import { AuthService } from '../auth.service';
 export class SignupComponent implements OnInit {
   private sub$ = new Subscription();
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private uiService: UIService
+    ) {}
 
   ngOnInit() {}
 
@@ -24,7 +28,15 @@ export class SignupComponent implements OnInit {
           password: form.value.password,
         })
         .pipe(switchMap(() => this.authService.creatUserData()))
-        .subscribe()
+        .subscribe(
+          () => {
+            this.uiService.openSnackBar(
+              'Added user succsessfull!',
+              'close',
+              3000
+            );
+          }
+        )
     );
   }
 
