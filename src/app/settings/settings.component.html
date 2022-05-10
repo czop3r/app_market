@@ -1,6 +1,15 @@
 <div fxLayout="column" fxLayoutAlign="center center">
   <h1>Settings</h1>
 </div>
+<label for="account">Your Account</label>
+<div fxLayout="row" #account fxLayoutGap="20px" fxLayoutAlign="space-between center">
+  <p>You have {{ userData.stocks.length }} stocks. <a routerLink="/wallet"><i class="bi bi-credit-card" ></i></a></p>
+  <div fxLayout="column">
+    <p>Delete your account</p>
+    <button class="btn btn-outline-danger" (click)="openDialogDeleteUser()"><i class="bi bi-person-x"></i></button>
+  </div>
+</div>
+<br>
 <label for="companies">Your Companies</label>
 <div *ngFor="let company of userData.companies; let i = index" #companies>
   <div
