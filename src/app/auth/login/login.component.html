@@ -1,7 +1,10 @@
 <section fxLayout="column" fxLayoutAlign="center center">
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <div class="form-group">
-      <label for="emailInput">Email address</label>
+      <label for="emailInput"
+        >Email address
+        <span *ngIf="emailInput.invalid" class="valid">*</span></label
+      >
       <input
         type="email"
         class="form-control"
@@ -13,10 +16,17 @@
         #emailInput="ngModel"
         required
       />
+      <small
+        *ngIf="emailInput.errors?.['email'] && emailInput.touched && emailInput.invalid"
+        class="valid"
+        >Email is required.</small
+      >
       <br />
     </div>
     <div class="form-group">
-      <label for="pwInput">Password</label>
+      <label for="pwInput"
+        >Password <span *ngIf="pwInput.invalid" class="valid">*</span></label
+      >
       <input
         type="password"
         class="form-control"
@@ -27,6 +37,11 @@
         required
         minlength="6"
       />
+      <small
+        *ngIf="pwInput.invalid && (pwInput.dirty || pwInput.touched)"
+        [ngClass]="{ valid: pwInput.touched && pwInput.invalid }"
+        >Password must be at least 6 characters long.</small
+      >
     </div>
     <br />
     <div fxLayoutAlign="space-between center">
