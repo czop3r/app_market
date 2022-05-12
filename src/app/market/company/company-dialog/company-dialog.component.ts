@@ -41,7 +41,13 @@ export class CompanyDialogComponent implements OnInit, OnDestroy {
           this.loadingProgress = false;
         })
     );
-    this.userData = this.marketService.onGetUserData();
+    this.sub$.add(
+      this.marketService.userData.subscribe(
+        sub => {
+          this.userData = sub;
+        }
+      )
+    )
   }
 
   ngOnDestroy() {
